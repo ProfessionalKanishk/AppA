@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="#bd8761">
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="95dp"
+        android:id="@+id/text_user_event"
+        android:text="Event"
+        android:gravity="center"
+        android:textSize="25dp"
+
+        />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/text_user_food"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Food"
+        android:textSize="25dp"
+
+        />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="95dp"
+        android:id="@+id/text_user_location"
+        android:text="Location"
+        android:gravity="center"
+        android:textSize="25dp"
+
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="95dp"
+        android:id="@+id/text_user_time"
+        android:text="Time"
+        android:gravity="center"
+        android:textSize="25dp"
+
+        />
+</LinearLayout>

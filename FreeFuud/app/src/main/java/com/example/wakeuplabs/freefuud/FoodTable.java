@@ -1,6 +1,7 @@
 package com.example.wakeuplabs.freefuud;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,15 +15,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.database.sqlite.SQLiteOpenHelper
+import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.ListView;
 
 public class FoodTable extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    DatabaseHelper myDb;
+    ListView listView;
+    SQLiteDatabase sqlLiteDatabase;
+    UserDbHelper userDbHelper;
+    Cursor cursor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_table);
+        listView = (ListView)findViewById(R.id.list_view);
+        userDbHelper = new UserDbHelper(getApplicationContext());
+        sqLiteDataBase = userDbHelper.getReadableDatabase();
+        cursor = userDbHelper.getInformation(sqlLiteDatabase);
+        if(cursor.moveToFirst()){
+            do{
+
+
+            }while (cursor.moveToNext());
+
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,7 +76,7 @@ public class FoodTable extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.food_table, menu);
@@ -76,7 +97,7 @@ public class FoodTable extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

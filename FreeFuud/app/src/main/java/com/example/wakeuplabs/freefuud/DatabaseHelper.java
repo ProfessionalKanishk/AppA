@@ -1,6 +1,8 @@
 package com.example.wakeuplabs.freefuud;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -27,12 +29,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String name,String surname,String marks) {
+    public boolean insertData(String event, String food,String location,String time) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2,name);
-        contentValues.put(COL_3,surname);
-        contentValues.put(COL_4,marks);
+        contentValues.put(COL_1,event);
+        contentValues.put(COL_2,food);
+        contentValues.put(COL_3,location);
+        contentValues.put(COL_4,time);
         long result = db.insert(TABLE_NAME,null ,contentValues);
         if(result == -1)
             return false;
@@ -46,15 +49,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public boolean updateData(String id,String name,String surname,String marks) {
+    public boolean updateData(String event, String food,String location,String time) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1,id);
-        contentValues.put(COL_2,name);
-        contentValues.put(COL_3,surname);
-        contentValues.put(COL_4,marks);
-        db.update(TABLE_NAME, contentValues, "ID = ?",new String[] { id });
+        contentValues.put(COL_1,event);
+        contentValues.put(COL_2,food);
+        contentValues.put(COL_3,location);
+        contentValues.put(COL_4,time);
+        db.update(TABLE_NAME, contentValues, "Event = ?",new String[] { event });
         return true;
+    }
+
+    public Cursor getInformation(SQLiteDatabase db){
+
+
+        Cursor cursor;
+        String[] projections = {COL_1, COL_2, COL_3, COL_4};
+        cursor = db.query(TABLE_NAME,projections,null,null,null,null,null); //selection, selection args, group rows, filter by row group, sort order
+        return cursor;
+
     }
 
     public Integer deleteData (String id) {
