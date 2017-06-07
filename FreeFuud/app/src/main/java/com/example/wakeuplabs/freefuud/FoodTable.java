@@ -23,9 +23,10 @@ public class FoodTable extends AppCompatActivity
 
     DatabaseHelper myDb;
     ListView listView;
-    SQLiteDatabase sqlLiteDatabase;
-    UserDbHelper userDbHelper;
+    SQLiteDatabase sqLiteDatabase;
+    DatabaseHelper userDbHelper;
     Cursor cursor;
+    ListDataAdapter listDataAdapter;
 
 
     @Override
@@ -33,12 +34,21 @@ public class FoodTable extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_table);
         listView = (ListView)findViewById(R.id.list_view);
-        userDbHelper = new UserDbHelper(getApplicationContext());
-        sqLiteDataBase = userDbHelper.getReadableDatabase();
-        cursor = userDbHelper.getInformation(sqlLiteDatabase);
+        listDataAdapter = new ListDataAdapter(getApplicationContext(),R.layout.raw_layout);
+        listView.setAdapter(listDataAdapter);
+        userDbHelper = new DatabaseHelper(getApplicationContext());
+        sqLiteDatabase = userDbHelper.getReadableDatabase();
+        cursor = userDbHelper.getInformation(sqLiteDatabase);
         if(cursor.moveToFirst()){
             do{
 
+                String events,food,location,time;
+                events = cursor.getString(0);
+                food = cursor.getString(1);
+                location = cursor.getString(2);
+                time = cursor.getString(3);
+                DataProvider dataProvider = new DataProvider(events,food,location,time);
+                listDataAdapter.add(dataProvider);
 
             }while (cursor.moveToNext());
 

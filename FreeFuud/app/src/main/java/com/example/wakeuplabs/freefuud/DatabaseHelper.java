@@ -6,16 +6,24 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "FF.db";
+    public static final int DATABASE_VERSION = 1;
     public static final String TABLE_NAME = "Events_data";
     public static final String COL_1 = "Events";
     public static final String COL_2 = "Food";
     public static final String COL_3 = "Location";
     public static final String COL_4 = "Time";
+    private SQLiteDatabase sqLiteDatabase;
+    Context context;
 
-    public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, null, 1);
+
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -74,4 +82,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
     }
+
+    public void openDatabase(){
+        String dbPath = context.getDatabasePath(DATABASE_NAME).getPath();
+        if(sqLiteDatabase != null && sqLiteDatabase.isOpen()){
+            return;
+        }
+        sqLiteDatabase = SQLiteDatabase.openDatabase(dbPath,null,SQLiteDatabase.OPEN_READWRITE);
+
+    }
+
+    public void closeDatabase(){
+        if(sqLiteDatabase != null){
+            sqLiteDatabase.close();
+        }
+    }
+
+    /***** PART 2
+    public List<Product> getListProduct(){
+        Product product = null;
+        List<Product> productList = new ArrayList<>();
+        openDatabase();
+        Cursor curs = sqLiteDatabase.rawQuery("TEST GET LIST PRODUCT <-- DATABASE HALPER", null);
+        curs.moveToFirst();
+        while(!curs.isAfterLast()){
+            product = new Product(curs.getString(0), curs.getString(1), curs.getString(2), curs.getString(3));
+            productList.add(product);
+            curs.moveToNext();
+
+        }
+        curs.close();
+        closeDatabase();
+        return productList
+
+    }
+     */
 }
