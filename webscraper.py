@@ -1,28 +1,84 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import mysql.connector
 
-my_url = 'https://www.newegg.ca/Product/ProductList.aspx?Submit=ENE&IsNodeId=1&N=100007708%20600536049%20600536050%20600565061%20600565504%20600565674%20601107975%20601203793%20601204369%20601210955%20601205646%20601202919%20601203927%20601203901%20601294835%20601295933%20601194948%20601296707&cm_sp=Cat_video-Cards_1-_-Visnav-_-Gaming-Video-Cards_1'
+
+my_url = 'https://calendar.utexas.edu/calendar/day/2016/8/30'
 
 #opening up connecti, grapbbin page
 uClient = uReq(my_url)
 page_html = uClient.read()
 uClient.close()
+cnx = mysql.connector.connect(user='root',password='s1101419',host='127.0.0.1',database='test_server')
+
+cursor = cnx.cursor()
 
 #html parshing
 page_soup = soup(page_html, "html.parser")
 
 #grab each product
-containers = page_soup.findAll("div",{"class":"item-container"})
+containers = page_soup.findAll("div",{"class":"item event_item vevent"})
 
 for container in containers:
-	brand = container.div.div.a.img["title"]
+
+	event_description = container.findAll("h4",{"class":"description"})
+	event = event_description[0].text.strip()
+	str1 = "free food"
+	str2 = "free pizza"
+	lines = event.split('\n')
 	
-	title_container = container.findAll("a",{"class":"item-title"})
-	product_name = title_container[0].text
+	print ('|||||'.join(lines))
 	
-	shipping_container = container.findAll("li",{"class":"price-ship"})
-	shipping = shipping_container[0].text.strip()
+	if any(str1 in s for s in lines):
+		print("***********************")
+		event_title = container.findAll("h3",{"class":"summary"})
+		event_name = event_title.find('a').text
 	
-	print ("brand: "+ brand)
-	print ("product name: " + product_name)
-	print ("shipping: " + shipping)
+		time_html = container.findAll("div",{"class":"dateright"})
+		time = time_html[0].text.strip()
+		
+		location_html = container.findAll("div",{"class":"location"})
+		location = location_html[0].text.strip()
+		
+		event_title = str(event_title)
+		print ("event name: "+ event_title)
+		print ("food: food?")
+		print ("location: "  + location)
+		print ("time: " + time)
+		
+		#cursor.execute("INSERT INTO food_table VALUES (%s, %s, %s, %s)", (event,food,location,time))
+		#increment = cursor.lastrowid # not sure if this does much, but was recommended to make data neater
+	
+		cnx.commit()
+	elif any(str2 in s for s in lines):
+		print("*************************")
+		event_title = container.findAll("h3",{"class":"summary"})
+		event_name = event_title[0].text.strip()
+	
+		time_html = container.findAll("div",{"class":"dateright"})
+		time = time_html[0].text.strip()
+		
+		location_html = container.findAll("div",{"class":"location"})
+		location = location_html[0].text.strip()
+		
+		event_title = str(event_title)
+		print ("event name: "+ event_title)
+		print ("food: pizza")
+		print ("location: "  + location)
+		print ("time: " + time)
+		
+		#cursor.execute("INSERT INTO food_table VALUES (%s, %s, %s, %s)", (event,food,location,time))
+		#increment = cursor.lastrowid # not sure if this does much, but was recommended to make data neater
+	
+		cnx.commit()
+
+	
+	else:
+	#do nothing
+		g=0
+
+cnx.commit()
+
+cursor.close()
+
+cnx.close()
